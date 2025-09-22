@@ -4,7 +4,7 @@ export default async function Modules() {
       <button>Collapse All</button>
       <button>View Progress</button>
       <select id="wd-select-publish">
-        <option selected value="PublishAll">
+        <option  defaultValue="PublishAll">
           Publish All
         </option>
         <option value="PublishModule1">Publish Module 1</option>

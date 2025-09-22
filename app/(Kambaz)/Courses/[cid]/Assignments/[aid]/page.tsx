@@ -5,7 +5,7 @@ export default function AssignmentEditor() {
       <p />
       <input id="wd-name" defaultValue="A1 - ENV + HTML" />
       <p />
-      <textarea id="wd-description">
+      <textarea style={{ height: "200px", width: "300px" }} id="wd-description">
         The assignment is available online. Submit a link to the landing page of
         your Web application running on Netlify. The landing page should include
         the following: Your full name and section, links to each of the lab
@@ -20,7 +20,7 @@ export default function AssignmentEditor() {
             <label htmlFor="wd-points">Points</label>
           </td>
           <td>
-            <input id="wd-points" defaultValue={100} />
+            <input type="number" id="wd-points" defaultValue={100} />
           </td>
         </tr>
         <p />
