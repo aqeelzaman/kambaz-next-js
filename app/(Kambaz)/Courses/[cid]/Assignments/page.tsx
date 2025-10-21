@@ -1,3 +1,4 @@
+"use client";
 import { Button, ListGroup, ListGroupItem } from "react-bootstrap";
 import FormControl from "react-bootstrap/esm/FormControl";
 import InputGroup from "react-bootstrap/esm/InputGroup";
@@ -7,13 +8,13 @@ import { FaSearch } from "react-icons/fa";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import AssignmentBarControlButtons from "./AssignmentBarControlButtons";
 import { MdOutlineAssignment } from "react-icons/md";
+import { assignments } from "../../../Database/index";
+import { useParams } from "next/navigation";
 
-export default async function Assignments({
-  params,
-}: {
-  params: Promise<{ cid: string }>;
-}) {
-  const { cid } = await params;
+export default function Assignments() {
+  const { cid } = useParams();
+  const courseAssignments = assignments.filter((a) => a.course === cid);
+
   return (
     <div>
       <div id="wd-assignments">
@@ -36,13 +37,14 @@ export default async function Assignments({
           </Button>
           <div className="col-md-6">
             <InputGroup>
-              <InputGroupText>
+              <InputGroupText className="bg-white">
                 <FaSearch />
               </InputGroupText>
               <FormControl
                 size="lg"
                 id="wd-search-assignment"
                 placeholder="Search..."
+                className="border-start-0"
               />
             </InputGroup>
           </div>
@@ -55,67 +57,42 @@ export default async function Assignments({
                 Assignments
                 <AssignmentBarControlButtons />
                 <div className="float-end fs-6 pt-1 me-1 wd-show-pill">
-                  40% of total{" "}
+                  40% of total
                 </div>
               </div>
 
               <ListGroup className="wd-assignments rounded-0">
-                <ListGroupItem
-                  className="wd-assignment p-3 ps-2"
-                  action
-                  href={`/Courses/${cid}/Assignments/123`}
-                >
-                  <div className="wd-assignment-container">
-                    <BsGripVertical className="fs-3 float-start" />
-                    <MdOutlineAssignment className="text-success float-start fs-3 me-2" />
-                    <div className="float-start col">
-                      <h3>A1</h3>
-                      <span className="text-danger">Multiple Modules</span> |
-                      <b> Not available until</b> May 6 at 12:00am |
-                      <br />
-                      <b>Due</b> May 13 at 11:59pm | 100 pts
+                {courseAssignments.map((assignment) => (
+                  <ListGroupItem
+                    key={assignment._id}
+                    className="wd-assignment p-3 ps-2"
+                    action
+                    href={`/Courses/${cid}/Assignments/${assignment._id}`}
+                  >
+                    <div className="wd-assignment-container">
+                      <BsGripVertical className="fs-3 float-start" />
+                      <MdOutlineAssignment className="text-success float-start fs-3 me-2" />
+                      <div className="float-start col">
+                        <h4>{assignment.title}</h4>
+                        <span className="text-danger">Multiple Modules</span> |
+                        <b> Not available until</b>{" "}
+                        {new Date(assignment.availableDate).toLocaleDateString(
+                          "en-US",
+                          { month: "long", day: "numeric" }
+                        )}{" "}
+                        at 12:00am |
+                        <br />
+                        <b>Due</b>{" "}
+                        {new Date(assignment.dueDate).toLocaleDateString(
+                          "en-US",
+                          { month: "long", day: "numeric" }
+                        )}{" "}
+                        at 11:59pm | 100 pts
+                      </div>
                     </div>
-                  </div>
-                  <AssignmentControlButtons />
-                </ListGroupItem>
-
-                <ListGroupItem
-                  className="wd-assignment p-3 ps-2"
-                  action
-                  href={`/Courses/${cid}/Assignments/234`}
-                >
-                  <div className="wd-assignment-container">
-                    <BsGripVertical className="fs-3 float-start" />
-                    <MdOutlineAssignment className="text-success float-start fs-3 me-2" />
-                    <div className="float-start">
-                      <h3>A2</h3>
-                      <span className="text-danger">Multiple Modules</span> |
-                      <b> Not available until</b> May 13 at 12:00am |
-                      <br />
-                      <b>Due</b> May 20 at 11:59pm | 100 pts
-                    </div>
-                  </div>
-                  <AssignmentControlButtons />
-                </ListGroupItem>
-
-                <ListGroupItem
-                  className="wd-assignment p-3 ps-2"
-                  action
-                  href={`/Courses/${cid}/Assignments/345`}
-                >
-                  <div className="wd-assignment-container">
-                    <BsGripVertical className="fs-3 float-start" />
-                    <MdOutlineAssignment className="text-success float-start fs-3 me-2" />
-                    <div className="float-start">
-                      <h3>A3</h3>
-                      <span className="text-danger">Multiple Modules</span> |
-                      <b> Not available until</b> May 20 at 12:00am |
-                      <br />
-                      <b>Due</b> May 27 at 11:59pm | 100 pts
-                    </div>
-                  </div>
-                  <AssignmentControlButtons />
-                </ListGroupItem>
+                    <AssignmentControlButtons />
+                  </ListGroupItem>
+                ))}
               </ListGroup>
             </ListGroupItem>
           </ListGroup>
