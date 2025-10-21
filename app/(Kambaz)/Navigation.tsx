@@ -12,8 +12,8 @@ export default function KambazNavigation() {
     { label: "Dashboard", path: "/Dashboard", icon: AiOutlineDashboard },
     { label: "Courses", path: "/Dashboard", icon: FaBook },
     { label: "Calendar", path: "/Calendar", icon: FaCalendarAlt },
-    { label: "Labs", path: "/Labs", icon: FaCog },
     { label: "Inbox", path: "/Inbox", icon: FaInbox },
+    { label: "Labs", path: "/Labs", icon: FaCog },
   ];
   return (
     <ListGroup
