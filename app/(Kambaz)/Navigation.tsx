@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import Link from "next/link";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
@@ -11,8 +12,8 @@ export default function KambazNavigation() {
     { label: "Dashboard", path: "/Dashboard", icon: AiOutlineDashboard },
     { label: "Courses", path: "/Dashboard", icon: FaBook },
     { label: "Calendar", path: "/Calendar", icon: FaCalendarAlt },
-    { label: "Inbox", path: "/Inbox", icon: FaInbox },
     { label: "Labs", path: "/Labs", icon: FaCog },
+    { label: "Inbox", path: "/Inbox", icon: FaInbox },
   ];
   return (
     <ListGroup

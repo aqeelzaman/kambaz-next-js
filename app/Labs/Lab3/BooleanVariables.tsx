@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 let numberVariable = 123,
   floatingPointNumber = 234.345;
 let true1 = true,
