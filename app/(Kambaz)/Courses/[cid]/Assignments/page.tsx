@@ -29,11 +29,7 @@ export default function Assignments() {
   };
 
   const handleClick = (a: any) => {
-    if (currentUser.role !== "FACULTY") {
-      alert(`Not a faculty. \n(Log in with username: admin, password: admin)`);
-    } else {
       redirect(`/Courses/${cid}/Assignments/${a._id}`);
-    }
   };
 
   const formattedDate = (dateStr: string) => {

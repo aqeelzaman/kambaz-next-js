@@ -79,38 +79,46 @@ export default function Dashboard() {
         </Button>
       </h1>
       <hr />
-      <h5>
-        New Course
-        <Button
-          className="btn btn-primary float-end mb-2"
-          id="wd-add-new-course-click"
-          onClick={() => ensureFaculty(() => dispatch(addNewCourse(course)))}
-        >
-          Add
-        </Button>
-        <button
-          className="btn btn-warning float-end me-2"
-          onClick={() => ensureFaculty(() => dispatch(updateCourse(course)))}
-          id="wd-update-course-click"
-        >
-          Update
-        </button>
-        <br />
-        <FormControl
-          value={course.name}
-          className="mb-2"
-          onChange={(e) => setCourse({ ...course, name: e.target.value })}
-        />
-        <FormControl
-          as="textarea"
-          value={course.description}
-          rows={3}
-          onChange={(e) =>
-            setCourse({ ...course, description: e.target.value })
-          }
-        />
-      </h5>
-      <hr />
+      {isFaculty && (
+        <div>
+          <h5>
+            New Course
+            <Button
+              className="btn btn-primary float-end mb-2"
+              id="wd-add-new-course-click"
+              onClick={() =>
+                ensureFaculty(() => dispatch(addNewCourse(course)))
+              }
+            >
+              Add
+            </Button>
+            <button
+              className="btn btn-warning float-end me-2"
+              onClick={() =>
+                ensureFaculty(() => dispatch(updateCourse(course)))
+              }
+              id="wd-update-course-click"
+            >
+              Update
+            </button>
+            <br />
+            <FormControl
+              value={course.name}
+              className="mb-2"
+              onChange={(e) => setCourse({ ...course, name: e.target.value })}
+            />
+            <FormControl
+              as="textarea"
+              value={course.description}
+              rows={3}
+              onChange={(e) =>
+                setCourse({ ...course, description: e.target.value })
+              }
+            />
+          </h5>
+          <hr />
+        </div>
+      )}
       <h2 id="wd-dashboard-published">
         {showAllCourses
           ? `Published Courses (${courses.length})`
@@ -156,33 +164,38 @@ export default function Dashboard() {
                         >
                           {course.description}
                         </CardText>
-                        <Button
-                          variant={enrolled ? "danger" : "success"}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (!currentUser) {
-                              alert("You must be logged in to enroll!");
-                              return;
-                            }
-                            if (enrolled) {
-                              dispatch(
-                                unenroll({
-                                  user: currentUser._id,
-                                  course: course._id,
-                                })
-                              );
-                            } else {
-                              dispatch(
-                                enroll({
-                                  user: currentUser._id,
-                                  course: course._id,
-                                })
-                              );
-                            }
-                          }}
-                        >
-                          {enrolled ? "Unenroll" : "Enroll"}
-                        </Button>
+                        {showAllCourses && (
+                          <Button
+                            variant={enrolled ? "danger" : "success"}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (!currentUser) {
+                                alert("You must be logged in to enroll!");
+                                return;
+                              }
+                              if (enrolled) {
+                                dispatch(
+                                  unenroll({
+                                    user: currentUser._id,
+                                    course: course._id,
+                                  })
+                                );
+                              } else {
+                                dispatch(
+                                  enroll({
+                                    user: currentUser._id,
+                                    course: course._id,
+                                  })
+                                );
+                              }
+                            }}
+                          >
+                            {enrolled ? "Unenroll" : "Enroll"}
+                          </Button>
+                        )}
+                        {!showAllCourses && (
+                          <Button variant="primary">Go</Button>
+                        )}
                         <button
                           onClick={(event) => {
                             event.preventDefault();

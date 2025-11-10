@@ -10,7 +10,6 @@ import {
 import { redirect, useParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { addAssignment, updateAssignment } from "../reducer";
-import Link from "next/link";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { RootState } from "../../../../store";
@@ -23,6 +22,7 @@ export default function AssignmentEditor() {
   const { assignments } = useSelector(
     (state: RootState) => state.assignmentsReducer
   );
+  const isFaculty = currentUser?.role === "FACULTY";
   const [assignment, setAssignment] = useState(() => {
     if (!isNew && assignments.length > 0) {
       const a = assignments.find((a: any) => a._id === aid) || assignments[0];
@@ -71,7 +71,13 @@ export default function AssignmentEditor() {
 
   return (
     <div id="wd-assignments-editor">
-      <h3>{isNew ? "Create New Assignment" : "Edit Assignment"}</h3>
+      <h3>
+        {isFaculty
+          ? isNew
+            ? "Create New Assignment"
+            : "Edit Assignment"
+          : "View Assignment"}
+      </h3>
       <div>
         <FormLabel htmlFor="wd-name">Assignment Name</FormLabel>
         <FormControl
@@ -80,6 +86,7 @@ export default function AssignmentEditor() {
           type="text"
           placeholder="Assignment Title"
           value={assignment.title}
+          disabled={!isFaculty}
           onChange={(e) =>
             setAssignment({ ...assignment, title: e.target.value })
           }
@@ -89,6 +96,7 @@ export default function AssignmentEditor() {
           as="textarea"
           rows={15}
           value={assignment.description}
+          disabled={!isFaculty}
           onChange={(e) =>
             setAssignment({ ...assignment, description: e.target.value })
           }
@@ -105,6 +113,7 @@ export default function AssignmentEditor() {
                 id="wd-points"
                 type="number"
                 value={assignment.points}
+                disabled={!isFaculty}
                 onChange={(e) =>
                   setAssignment({
                     ...assignment,
@@ -120,7 +129,7 @@ export default function AssignmentEditor() {
               <FormLabel htmlFor="wd-group">Assignment Group</FormLabel>
             </div>
             <div className="col-9">
-              <FormSelect id="wd-group">
+              <FormSelect id="wd-group" disabled={!isFaculty}>
                 <option value="0" defaultChecked>
                   ASSIGNMENTS
                 </option>
@@ -137,7 +146,7 @@ export default function AssignmentEditor() {
               </FormLabel>
             </div>
             <div className="col-9">
-              <FormSelect id="wd-display-grade-as">
+              <FormSelect id="wd-display-grade-as" disabled={!isFaculty}>
                 <option value="0" defaultChecked>
                   Percentage
                 </option>
@@ -154,7 +163,7 @@ export default function AssignmentEditor() {
             </div>
             <div className="col-9 wd-show-border">
               <div className="row m-2 mt-3 mb-3">
-                <FormSelect id="wd-submission-type">
+                <FormSelect id="wd-submission-type" disabled={!isFaculty}>
                   <option value="0" defaultChecked>
                     Online
                   </option>
@@ -172,6 +181,7 @@ export default function AssignmentEditor() {
                     className="ps-2"
                     type="checkbox"
                     id="wd-text-entry"
+                    disabled={!isFaculty}
                   />
                   <FormLabel className="ps-2" htmlFor="wd-text-entry">
                     Text Entry
@@ -181,6 +191,7 @@ export default function AssignmentEditor() {
                     className="ps-2"
                     type="checkbox"
                     id="wd-website-url"
+                    disabled={!isFaculty}
                   />
                   <FormLabel className="ps-2" htmlFor="wd-website-url">
                     Website URL
@@ -190,6 +201,7 @@ export default function AssignmentEditor() {
                     className="ps-2"
                     type="checkbox"
                     id="wd-media-recordings"
+                    disabled={!isFaculty}
                   />
                   <FormLabel className="ps-2" htmlFor="wd-media-recordings">
                     Media Recordings
@@ -199,6 +211,7 @@ export default function AssignmentEditor() {
                     className="ps-2"
                     type="checkbox"
                     id="wd-student-annotation"
+                    disabled={!isFaculty}
                   />
                   <FormLabel className="ps-2" htmlFor="wd-student-annotation">
                     Student Annotation
@@ -208,6 +221,7 @@ export default function AssignmentEditor() {
                     className="ps-2"
                     type="checkbox"
                     id="wd-file-upload"
+                    disabled={!isFaculty}
                   />
                   <FormLabel className="ps-2" htmlFor="wd-file-upload">
                     File Uploads
@@ -228,6 +242,7 @@ export default function AssignmentEditor() {
                   className="ms-2"
                   type="date"
                   value={assignment.dueDate}
+                  disabled={!isFaculty}
                   onChange={(e) =>
                     setAssignment({ ...assignment, dueDate: e.target.value })
                   }
@@ -254,6 +269,7 @@ export default function AssignmentEditor() {
                       id="wd-available-from"
                       type="date"
                       value={assignment.availableDate}
+                      disabled={!isFaculty}
                       onChange={(e) =>
                         setAssignment({
                           ...assignment,
@@ -267,6 +283,7 @@ export default function AssignmentEditor() {
                       id="wd-available-until"
                       type="date"
                       value={assignment.dueDate}
+                      disabled={!isFaculty}
                       onChange={(e) =>
                         setAssignment({
                           ...assignment,
@@ -283,7 +300,7 @@ export default function AssignmentEditor() {
       </div>
       <hr />
       <div>
-        <Link href={`/Courses/${cid}/Assignments`}>
+        {isFaculty && (
           <Button
             variant="danger"
             style={{ float: "right" }}
@@ -293,18 +310,16 @@ export default function AssignmentEditor() {
           >
             Save
           </Button>
-        </Link>
-        <Link href={`/Courses/${cid}/Assignments`}>
-          <Button
-            variant="secondary"
-            style={{ float: "right" }}
-            className="me-1"
-            id="wd-cancel"
-            onClick={cancel}
-          >
-            Cancel
-          </Button>
-        </Link>
+        )}
+        <Button
+          variant="secondary"
+          style={{ float: "right" }}
+          className="me-1"
+          id="wd-cancel"
+          onClick={cancel}
+        >
+          {isFaculty ? "Cancel" : "Go Back"}
+        </Button>
       </div>
     </div>
   );
