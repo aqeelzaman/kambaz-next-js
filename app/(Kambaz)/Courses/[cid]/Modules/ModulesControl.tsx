@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Button,
   Dropdown,
@@ -8,7 +10,32 @@ import {
 import { FaPlus } from "react-icons/fa6";
 import GreenCheckmark from "./GreenCheckmark";
 import GrayCrossmark from "./RedCrossmark";
-export default function ModulesControls() {
+import ModuleEditor from "./ModuleEditor";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+export default function ModulesControls({
+  moduleName,
+  setModuleName,
+  addModule,
+}: {
+  moduleName: string;
+  setModuleName: (title: string) => void;
+  addModule: () => void;
+}) {
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY";
+
+  const ensureFaculty = (action: Function) => {
+    if (!isFaculty) {
+      alert(`Not a faculty. \n(Log in with username: admin, password: admin)`);
+      return;
+    }
+    action();
+  };
+
   return (
     <div id="wd-modules-controls" className="text-nowrap">
       <Button
@@ -16,6 +43,7 @@ export default function ModulesControls() {
         size="lg"
         className="me-1 float-end"
         id="wd-add-module-btn"
+        onClick={() => ensureFaculty(() => handleShow())}
       >
         <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
         Module
@@ -58,6 +86,14 @@ export default function ModulesControls() {
       >
         Collapse All
       </Button>
+      <ModuleEditor
+        show={show}
+        handleClose={handleClose}
+        dialogTitle="Add Module"
+        moduleName={moduleName}
+        setModuleName={setModuleName}
+        addModule={addModule}
+      />
     </div>
   );
 }

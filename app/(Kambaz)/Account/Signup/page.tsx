@@ -25,7 +25,11 @@ export default function Signup() {
         Sign up{" "}
       </Link>
       <br />
-      <Link id="wd-signin-link" href="/Account/Signin">
+      <Link
+        className="btn btn-primary w-30 mb-2"
+        id="wd-signin-link"
+        href="/Account/Signin"
+      >
         Sign in
       </Link>
     </div>

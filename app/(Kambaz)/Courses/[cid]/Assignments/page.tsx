@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Button, ListGroup, ListGroupItem } from "react-bootstrap";
 import FormControl from "react-bootstrap/esm/FormControl";
@@ -8,12 +9,40 @@ import { FaSearch } from "react-icons/fa";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import AssignmentBarControlButtons from "./AssignmentBarControlButtons";
 import { MdOutlineAssignment } from "react-icons/md";
-import { assignments } from "../../../Database/index";
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const courseAssignments = assignments.filter((a) => a.course === cid);
+  const { assignments } = useSelector(
+    (state: RootState) => state.assignmentsReducer
+  );
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+  const handleAddAssignment = () => {
+    if (currentUser.role !== "FACULTY") {
+      alert(`Not a faculty. \n(Log in with username: admin, password: admin)`);
+    } else {
+      redirect(`/Courses/${cid}/Assignments/new`);
+    }
+  };
+
+  const handleClick = (a: any) => {
+    if (currentUser.role !== "FACULTY") {
+      alert(`Not a faculty. \n(Log in with username: admin, password: admin)`);
+    } else {
+      redirect(`/Courses/${cid}/Assignments/${a._id}`);
+    }
+  };
+
+  const formattedDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return (
+      date.toLocaleDateString("en-US", { month: "long" }) +
+      ` ${date.getDate() + 1}`
+    );
+  };
 
   return (
     <div>
@@ -24,6 +53,7 @@ export default function Assignments() {
             size="lg"
             className="float-end me-1"
             id="wd-add-assignment"
+            onClick={handleAddAssignment}
           >
             + Assignment
           </Button>
@@ -60,39 +90,37 @@ export default function Assignments() {
                   40% of total
                 </div>
               </div>
-
               <ListGroup className="wd-assignments rounded-0">
-                {courseAssignments.map((assignment) => (
-                  <ListGroupItem
-                    key={assignment._id}
-                    className="wd-assignment p-3 ps-2"
-                    action
-                    href={`/Courses/${cid}/Assignments/${assignment._id}`}
-                  >
-                    <div className="wd-assignment-container">
-                      <BsGripVertical className="fs-3 float-start" />
-                      <MdOutlineAssignment className="text-success float-start fs-3 me-2" />
-                      <div className="float-start col">
-                        <h4>{assignment.title}</h4>
-                        <span className="text-danger">Multiple Modules</span> |
-                        <b> Not available until</b>{" "}
-                        {new Date(assignment.availableDate).toLocaleDateString(
-                          "en-US",
-                          { month: "long", day: "numeric" }
-                        )}{" "}
-                        at 12:00am |
-                        <br />
-                        <b>Due</b>{" "}
-                        {new Date(assignment.dueDate).toLocaleDateString(
-                          "en-US",
-                          { month: "long", day: "numeric" }
-                        )}{" "}
-                        at 11:59pm | 100 pts
+                {assignments
+                  .filter((assignment: any) => assignment.course === cid)
+                  .map((assignment: any) => (
+                    <ListGroupItem
+                      key={assignment._id}
+                      className="wd-assignment p-3 ps-2"
+                      action
+                      onClick={() => handleClick(assignment)}
+                    >
+                      <div className="wd-assignment-container">
+                        <BsGripVertical className="fs-3 float-start" />
+                        <MdOutlineAssignment className="text-success float-start fs-3 me-2" />
+                        <div className="float-start col">
+                          <h4>{assignment.title}</h4>
+                          <span className="text-danger">
+                            Multiple Modules
+                          </span>{" "}
+                          |<b> Not available until </b>
+                          {formattedDate(assignment.availableDate)}
+                          &nbsp;at 12:00am |
+                          <br />
+                          <b>Due </b>
+                          {formattedDate(assignment.dueDate)}
+                          &nbsp;at 11:59pm |&nbsp;
+                          {assignment.points} points
+                        </div>
                       </div>
-                    </div>
-                    <AssignmentControlButtons />
-                  </ListGroupItem>
-                ))}
+                      <AssignmentControlButtons assignment={assignment} />
+                    </ListGroupItem>
+                  ))}
               </ListGroup>
             </ListGroupItem>
           </ListGroup>
@@ -106,7 +134,7 @@ export default function Assignments() {
             Quizzes
             <AssignmentBarControlButtons />
             <div className="float-end fs-6 pt-1 me-1 wd-show-pill">
-              10% of total{" "}
+              10% of total
             </div>
           </div>
         </ListGroupItem>
@@ -119,7 +147,7 @@ export default function Assignments() {
             Exams
             <AssignmentBarControlButtons />
             <div className="float-end fs-6 pt-1 me-1 wd-show-pill">
-              20% of total{" "}
+              20% of total
             </div>
           </div>
         </ListGroupItem>
@@ -132,7 +160,7 @@ export default function Assignments() {
             Projects
             <AssignmentBarControlButtons />
             <div className="float-end fs-6 pt-1 me-1 wd-show-pill">
-              30% of total{" "}
+              30% of total
             </div>
           </div>
         </ListGroupItem>
