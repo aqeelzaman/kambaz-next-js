@@ -69,14 +69,16 @@ export default function Dashboard() {
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">
         Dashboard
-        <Button
-          variant="primary"
-          className="mt-2 float-end"
-          id="wd-enrollments-btn"
-          onClick={() => setShowAllCourses(!showAllCourses)}
-        >
-          {showAllCourses ? "Show My Enrollments" : "Show All Courses"}
-        </Button>
+        {currentUser && (
+          <Button
+            variant="primary"
+            className="mt-2 float-end"
+            id="wd-enrollments-btn"
+            onClick={() => setShowAllCourses(!showAllCourses)}
+          >
+            {showAllCourses ? "Show My Enrollments" : "Show All Courses"}
+          </Button>
+        )}
       </h1>
       <hr />
       {isFaculty && (
@@ -120,9 +122,11 @@ export default function Dashboard() {
         </div>
       )}
       <h2 id="wd-dashboard-published">
-        {showAllCourses
-          ? `Published Courses (${courses.length})`
-          : "My Courses"}
+        {currentUser
+          ? showAllCourses
+            ? `Published Courses (${courses.length})`
+            : "My Courses"
+          : "Log in to see courses"}
       </h2>
       <hr />
       <div id="wd-dashboard-courses">
@@ -145,7 +149,11 @@ export default function Dashboard() {
                 <Col className="wd-dashboard-course" style={{ width: "300px" }}>
                   <Card>
                     <Link
-                      href={`/Courses/${course._id}/Home`}
+                      href={
+                        isFaculty || enrolled
+                          ? `/Courses/${course._id}/Home`
+                          : "/Dashboard"
+                      }
                       className="wd-dashboard-course-link text-decoration-none text-dark"
                     >
                       <CardImg
@@ -196,26 +204,28 @@ export default function Dashboard() {
                         {!showAllCourses && (
                           <Button variant="primary">Go</Button>
                         )}
-                        <button
+                        {isFaculty && <Button
                           onClick={(event) => {
                             event.preventDefault();
                             dispatch(deleteCourse(course._id));
                           }}
-                          className="btn btn-danger float-end"
+                          className="float-end"
                           id="wd-delete-course-click"
+                          variant="danger"
                         >
                           Delete
-                        </button>
-                        <button
+                        </Button>}
+                        {isFaculty && <Button
                           id="wd-edit-course-click"
+                          variant="warning"
                           onClick={(event) => {
                             event.preventDefault();
                             setCourse(course);
                           }}
-                          className="btn btn-warning me-2 float-end"
+                          className="me-2 float-end"
                         >
                           Edit
-                        </button>
+                        </Button>}
                       </CardBody>
                     </Link>
                   </Card>
