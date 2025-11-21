@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Button, ListGroup, ListGroupItem } from "react-bootstrap";
@@ -10,15 +11,31 @@ import AssignmentControlButtons from "./AssignmentControlButtons";
 import AssignmentBarControlButtons from "./AssignmentBarControlButtons";
 import { MdOutlineAssignment } from "react-icons/md";
 import { redirect, useParams } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
+import { setAssignments } from "./reducer";
+import * as client from "../../client";
+import { useEffect } from "react";
 
 export default function Assignments() {
   const { cid } = useParams();
+  
   const { assignments } = useSelector(
     (state: RootState) => state.assignmentsReducer
   );
+
+  const dispatch = useDispatch();
+
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+  const fetchAssignments = async () => {
+    const assignments = await client.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
 
   const handleAddAssignment = () => {
     if (currentUser.role !== "FACULTY") {

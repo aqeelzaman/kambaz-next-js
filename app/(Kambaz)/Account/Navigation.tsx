@@ -17,7 +17,7 @@ export default function AccountNavigation() {
           <NavLink
             as={Link}
             href={link}
-            active={pathname.endsWith(link.toLowerCase())}
+            active={pathname.endsWith(link)}
           >
             {link}
           </NavLink>
