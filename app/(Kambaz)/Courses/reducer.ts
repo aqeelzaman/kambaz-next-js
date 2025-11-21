@@ -28,6 +28,6 @@ const coursesSlice = createSlice({
     },
   },
 });
-export const { addNewCourse, deleteCourse, updateCourse, setCourses } =
+export const { addNewCourse, deleteCourse, updateCourse } =
   coursesSlice.actions;
 export default coursesSlice.reducer;

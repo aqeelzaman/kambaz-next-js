@@ -9,69 +9,59 @@ import {
 } from "react-bootstrap";
 import { redirect, useParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { setAssignments } from "../reducer";
-import { useEffect, useState } from "react";
+import { addAssignment, updateAssignment } from "../reducer";
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { RootState } from "../../../../store";
-import * as client from "../../../client";
 
 export default function AssignmentEditor() {
   const { aid, cid } = useParams();
-
   const dispatch = useDispatch();
-
   const isNew = aid === "new";
-
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-
   const { assignments } = useSelector(
     (state: RootState) => state.assignmentsReducer
   );
-
   const isFaculty = currentUser?.role === "FACULTY";
-
-  const [assignment, setAssignment] = useState({
-    _id: "",
-    title: "",
-    description: "",
-    points: 100,
-    dueDate: "",
-    availableDate: "",
+  const [assignment, setAssignment] = useState(() => {
+    if (!isNew && assignments.length > 0) {
+      const a = assignments.find((a: any) => a._id === aid) || assignments[0];
+      return {
+        _id: a._id,
+        title: a.title || "",
+        description: a.description || "",
+        points: a.points || 100,
+        dueDate: a.dueDate || "",
+        availableDate: a.availableDate || "",
+      };
+    }
+    return {
+      _id: uuidv4(),
+      title: "",
+      description: "",
+      points: 100,
+      dueDate: "",
+      availableDate: "",
+    };
   });
 
-  useEffect(() => {
-    if (!isNew && assignments.length > 0) {
-      const foundAssignment: any = assignments.find((a: any) => a._id === aid);
-      if (foundAssignment) {
-        setAssignment({
-          _id: foundAssignment._id,
-          title: foundAssignment.title || "",
-          description: foundAssignment.description || "",
-          points: foundAssignment.points || 100,
-          dueDate: foundAssignment.dueDate || "",
-          availableDate: foundAssignment.availableDate || "",
-        });
-      }
-    }
-  }, [aid, assignments, isNew]);
-
-  const save = async () => {
+  const save = () => {
     if (currentUser?.role !== "FACULTY") return;
-    if (isNew) {
-      const newAssignment = await client.createAssignmentForCourse(
-        cid as string,
-        assignment
-      );
-      dispatch(setAssignments([...assignments, newAssignment]));
-    } else {
-      await client.updateAssignment(assignment);
+    if (isNew)
       dispatch(
-        setAssignments(
-          assignments.map((a: any) =>
-            a._id === assignment._id ? assignment : a
-          )
-        )
+        addAssignment({
+          ...assignment,
+          course: cid,
+        })
       );
-    }
+    else
+      dispatch(
+        updateAssignment({
+          ...assignments[0],
+          ...assignment,
+          course: cid,
+        })
+      );
     redirect(`/Courses/${cid}/Assignments`);
   };
 
