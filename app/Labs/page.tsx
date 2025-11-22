@@ -7,10 +7,21 @@ export default function Labs() {
       <br />
       <b>Section: </b>CS-5610 Fall 25
       <br />
-      <b>GitHub repo:</b>
+      <b>GitHub client repo: </b>
       <Link href="https://github.com/aqeelzaman/kambaz-next-js">
         https://github.com/aqeelzaman/kambaz-next-js
       </Link>
+      <br />
+      <b>GitHub server repo: </b>
+      <Link href="https://github.com/aqeelzaman/kambaz-node-server-app">
+        https://github.com/aqeelzaman/kambaz-node-server-app
+      </Link>
+      <br />
+      <b>Render server link: </b>
+      <Link href="https://kambaz-node-server-app-jh9i.onrender.com">
+        https://kambaz-node-server-app-jh9i.onrender.com
+      </Link>
+      <br />
       <ul>
         <li>
           <Link href="/Labs/Lab1" id="wd-lab1-link">
