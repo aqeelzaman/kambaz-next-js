@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import { useEffect, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaPencil } from "react-icons/fa6";
