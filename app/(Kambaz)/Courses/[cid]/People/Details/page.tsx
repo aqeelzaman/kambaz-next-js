@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
+""
 import { useEffect, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaPencil } from "react-icons/fa6";
@@ -96,21 +96,19 @@ export default function PeopleDetails({
       <br />
       <b>Section:</b> <span className="wd-section"> {user.section} </span>{" "}
       <br />
-      <b>Total Activity:</b>{" "}
+      <b>Total Activity:</b>
       <span className="wd-total-activity">{user.totalActivity}</span> <hr />
       <button
         onClick={() => deleteUser(uid)}
         className="btn btn-danger float-end wd-delete"
       >
-        {" "}
-        Delete{" "}
+        Delete
       </button>
       <button
         onClick={onClose}
         className="btn btn-secondary float-end me-2 wd-cancel"
       >
-        {" "}
-        Cancel{" "}
+        Cancel
       </button>
     </div>
   );

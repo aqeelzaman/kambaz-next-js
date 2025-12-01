@@ -16,11 +16,11 @@ export default function ModuleControlButtons({
   editModule: (moduleId: string) => void;
 }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const isFaculty = currentUser?.role === "FACULTY";
+  const isFaculty = currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
 
   const ensureFaculty = (action: Function) => {
     if (!isFaculty) {
-      alert(`Not a faculty. \n(Log in with username: admin, password: admin)`);
+      alert(`Not a faculty or admin. \n(Log in with username: ada, password: 123)`);
       return;
     }
     action();

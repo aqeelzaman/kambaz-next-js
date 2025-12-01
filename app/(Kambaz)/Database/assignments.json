@@ -214,14 +214,5 @@
     "dueDate": "2024-10-21",
     "points": 100,
     "description": "Compose original text in Sindarin demonstrating mastery of vocabulary, grammar, and stylistic conventions. Include translation and linguistic commentary on your composition choices."
-  },
-  {
-    "_id": "new",
-    "title": "",
-    "course": "",
-    "availableDate": "",
-    "dueDate": "",
-    "points": 0,
-    "description": ""
   }
 ]

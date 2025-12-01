@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { FormControl } from "react-bootstrap";
-const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER;
+const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER2;
 export default function PathParameters() {
   const [a, setA] = useState("34");
   const [b, setB] = useState("23");

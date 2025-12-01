@@ -19,7 +19,7 @@ import { useEffect } from "react";
 
 export default function Assignments() {
   const { cid } = useParams();
-  
+
   const { assignments } = useSelector(
     (state: RootState) => state.assignmentsReducer
   );
@@ -38,23 +38,26 @@ export default function Assignments() {
   }, []);
 
   const handleAddAssignment = () => {
-    if (currentUser.role !== "FACULTY") {
-      alert(`Not a faculty. \n(Log in with username: admin, password: admin)`);
+    if (currentUser.role !== "FACULTY" && currentUser.role !== "ADMIN") {
+      alert(
+        `Not a faculty or admin. \n(Log in with username: ada, password: 123)`
+      );
     } else {
       redirect(`/Courses/${cid}/Assignments/new`);
     }
   };
 
   const handleClick = (a: any) => {
-      redirect(`/Courses/${cid}/Assignments/${a._id}`);
+    redirect(`/Courses/${cid}/Assignments/${a._id}`);
   };
 
   const formattedDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return (
-      date.toLocaleDateString("en-US", { month: "long" }) +
-      ` ${date.getDate() + 1}`
-    );
+    const [year, month, day] = dateStr.split("-").map(Number);
+
+    // Create the date in local timezone using year, month-1, day
+    const date = new Date(year, month - 1, day);
+
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
   return (

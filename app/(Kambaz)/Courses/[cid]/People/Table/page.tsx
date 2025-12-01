@@ -3,7 +3,10 @@
 import { Table } from "react-bootstrap";
 import PeopleDetails from "../Details/page";
 import { FaUserCircle } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as client from "../../../../Account/client";
+import { useParams } from "next/navigation";
+import { useSelector } from "react-redux";
 
 export default function PeopleTable({
   users = [],
@@ -12,11 +15,45 @@ export default function PeopleTable({
   users?: any[];
   fetchUsers: () => void;
 }) {
+  const { cid } = useParams();
+  const [localUsers, setLocalUsers] = useState<any[]>(users ?? []);
+  const [loaded, setLoaded] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [showUserId, setShowUserId] = useState<string | null>(null);
+  const [showUserId, setShowUserId] = useState<string>("");
+
+  useEffect(() => {
+    if (users && users.length > 0) {
+      setLocalUsers(users);
+      setLoaded(true);
+      return;
+    }
+    if (!loaded) {
+      const load = async () => {
+        try {
+          const found = await client.findUsersForCourse(cid as string);
+          setLocalUsers(found ?? []);
+        } catch (err) {
+          console.error(err);
+          setLocalUsers([]);
+        } finally {
+          setLoaded(true);
+        }
+      };
+      void load();
+    }
+  }, [users, cid, loaded]);
+
+  if (localUsers.length > 0) {
+    users = localUsers;
+  }
+
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const isFaculty =
+    currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
+
   return (
     <div id="wd-people-table">
-      {showDetails && (
+      {isFaculty && showDetails && (
         <PeopleDetails
           uid={showUserId}
           onClose={() => {

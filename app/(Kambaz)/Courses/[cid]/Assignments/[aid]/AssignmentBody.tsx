@@ -27,7 +27,8 @@ export default function AssignmentEditor() {
     (state: RootState) => state.assignmentsReducer
   );
 
-  const isFaculty = currentUser?.role === "FACULTY";
+  const isFaculty =
+    currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
 
   const [assignment, setAssignment] = useState({
     _id: "",
@@ -55,7 +56,8 @@ export default function AssignmentEditor() {
   }, [aid, assignments, isNew]);
 
   const save = async () => {
-    if (currentUser?.role !== "FACULTY") return;
+    if (currentUser?.role !== "FACULTY" && currentUser?.role !== "ADMIN")
+      return;
     if (isNew) {
       const newAssignment = await client.createAssignmentForCourse(
         cid as string,
@@ -63,7 +65,7 @@ export default function AssignmentEditor() {
       );
       dispatch(setAssignments([...assignments, newAssignment]));
     } else {
-      await client.updateAssignment(assignment);
+      await client.updateAssignment(cid as string, assignment);
       dispatch(
         setAssignments(
           assignments.map((a: any) =>

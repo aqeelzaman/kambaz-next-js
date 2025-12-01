@@ -14,17 +14,21 @@ export default function AssignmentControlButtons({
 }) {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const {assignments} = useSelector((state: any) => state.assignmentsReducer);
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
 
   const handleDelete = async (a: any) => {
-    if (currentUser?.role !== "FACULTY") {
-      alert(`Not a faculty. \n(Log in with username: admin, password: admin)`);
+    if (currentUser?.role !== "FACULTY" && currentUser?.role !== "ADMIN") {
+      alert(
+        `Not a faculty or admin. \n(Log in with username: ada, password: 123)`
+      );
       return;
     }
     if (window.confirm(`Delete assignment "${a.title}"?`)) {
-      await client.deleteAssignment(a._id);
+      await client.deleteAssignment(a.course, a._id);
       dispatch(
-        setAssignments(assignments.filter((assignment: any) => assignment._id !== a._id))
+        setAssignments(
+          assignments.filter((assignment: any) => assignment._id !== a._id)
+        )
       );
     }
     redirect(`/Courses/${assignment.course}/Assignments`);

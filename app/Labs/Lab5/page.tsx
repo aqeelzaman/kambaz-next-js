@@ -6,7 +6,7 @@ import WorkingWithArrays from "./WorkingWithArrays";
 import WorkingWithArraysAsynchronously from "./WorkingWithArraysAsynchronously";
 import WorkingWithObjects from "./WorkingWithObjects";
 import WorkingWithObjectsAsynchronously from "./WorkingWithObjectsAsynchronously";
-const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER;
+const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER2;
 
 export default function Lab5() {
   return (

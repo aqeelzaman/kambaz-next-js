@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
-const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER;
+const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER2;
 const TODOS_API = `${HTTP_SERVER}/lab5/todos`;
 export const fetchTodos = async () => {
   const response = await axios.get(TODOS_API);

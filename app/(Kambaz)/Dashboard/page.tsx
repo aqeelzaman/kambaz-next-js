@@ -44,7 +44,7 @@ export default function Dashboard() {
     number: "New Number",
     startDate: "2023-09-10",
     endDate: "2023-12-15",
-    image: "/images/reactjs.jpg",
+    image: "/images/new_course.jpg",
     description: "New Description",
   });
 
@@ -56,10 +56,6 @@ export default function Dashboard() {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    fetchCourses();
-  }, [currentUser]);
 
   const [showAllCourses, setShowAllCourses] = useState(false);
 
@@ -78,10 +74,9 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    if (!currentUser) return;
     fetchCourses();
-    if (currentUser) {
-      fetchEnrollments();
-    }
+    fetchEnrollments();
   }, [currentUser]);
 
   const onAddNewCourse = async (course: any) => {
@@ -111,6 +106,7 @@ export default function Dashboard() {
 
   const isEnrolled = (courseId: string) => {
     if (!currentUser) return false;
+    if (!Array.isArray(enrollments)) return false;
     return enrollments.some(
       (enrollment: any) =>
         enrollment.user === currentUser._id && enrollment.course === courseId
@@ -144,11 +140,14 @@ export default function Dashboard() {
     }
   };
 
-  const isFaculty = currentUser?.role === "FACULTY";
+  const isFaculty =
+    currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
 
   const ensureFaculty = (action: Function) => {
     if (!isFaculty) {
-      alert(`Not a faculty. \n(Log in with username: admin, password: admin)`);
+      alert(
+        `Not a faculty or admin. \n(Log in with username: ada, password: 123)`
+      );
       return;
     }
     action();
