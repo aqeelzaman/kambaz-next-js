@@ -61,7 +61,7 @@ export default function TOC() {
         </NavLink>
       </NavItem>
       <NavItem>
-        <NavLink href="/" as={Link}>
+        <NavLink href="/" as={Link} style={{color: "red"}}>
           Kambaz
         </NavLink>
       </NavItem>
@@ -84,7 +84,7 @@ export default function TOC() {
       <NavItem>
         <NavLink
           id="wd-github"
-          href="https://kambaz-node-server-app-jh9i.onrender.com"
+          href="https://kambaz-node-server-app-a6-bw0m.onrender.com"
         >
           Server link
         </NavLink>
