@@ -18,8 +18,8 @@ export default function Labs() {
       </Link>
       <br />
       <b>Render server link: </b>
-      <Link href="https://kambaz-node-server-app-jh9i.onrender.com">
-        https://kambaz-node-server-app-jh9i.onrender.com
+      <Link href="https://kambaz-node-server-app-a6-bw0m.onrender.com">
+        https://kambaz-node-server-app-a6-bw0m.onrender.com
       </Link>
       <br />
       <ul>
